@@ -1,0 +1,19 @@
+{{- if and (eq .Values.linkwarden.storage.type "filesystem") .Values.linkwarden.storage.pvc.enabled (not .Values.linkwarden.storage.pvc.existingClaim) }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "linkwarden.fullname" . }}-data
+  labels:
+    {{- include "linkwarden.labels" . | nindent 4 }}
+spec:
+  accessModes:
+  {{- range .Values.linkwarden.storage.pvc.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.linkwarden.storage.pvc.size | quote }}
+  {{- if .Values.linkwarden.storage.pvc.storageClass }}
+  storageClassName: {{ .Values.linkwarden.storage.pvc.storageClass | quote }}
+  {{- end }}
+{{- end }}

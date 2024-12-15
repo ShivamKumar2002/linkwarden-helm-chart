@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "linkwarden.fullname" . }}-env-config
+  labels:
+    {{- include "linkwarden.labels" . | nindent 4 }}
+data:
+  {{- range $key, $value := .Values.linkwarden.environment }}
+    {{ $key }}: {{ $value | quote }}
+  {{- end }}
+  {{- if .Values.linkwarden.storage.storageFolder }}
+  STORAGE_FOLDER: {{ .Values.linkwarden.storage.storageFolder | quote }}
+  {{- end }}
+  {{- if .Values.linkwarden.paginationTakeCount }}
+  PAGINATION_TAKE_COUNT: {{ .Values.linkwarden.paginationTakeCount | quote }}
+  {{- end }}
+  {{- if .Values.linkwarden.maxWorkers }}
+  MAX_WORKERS: {{ .Values.linkwarden.maxWorkers | quote }}
+  {{- end }}
+  {{- if .Values.linkwarden.reArchiveLimit }}
+  RE_ARCHIVE_LIMIT: {{ .Values.linkwarden.reArchiveLimit | quote }}
+  {{- end }}
+  {{- if .Values.linkwarden.autoScrollTimeout }}
+  AUTO_SCROLL_TIMEOUT: {{ .Values.linkwarden.autoScrollTimeout | quote }}
+  {{- end }}
+  {{- if .Values.linkwarden.browserTimeout }}
+  BROWSER_TIMEOUT: {{ .Values.linkwarden.browserTimeout | quote }}
+  {{- end }}
+  {{- if .Values.linkwarden.ignoreUnauthorizedCA }}
+  IGNORE_UNAUTHORIZED_CA: {{ .Values.linkwarden.ignoreUnauthorizedCA | quote }}
+  {{- end }}
+  {{- if .Values.linkwarden.ignoreHttpsErrors }}
+  IGNORE_HTTPS_ERRORS: {{ .Values.linkwarden.ignoreHttpsErrors | quote }}
+  {{- end }}
+  {{- if .Values.linkwarden.disablePreservation }}
+  DISABLE_PRESERVATION: {{ .Values.linkwarden.disablePreservation | quote }}
+  {{- end }}
+  {{- if .Values.linkwarden.disableRegistration }}
+  NEXT_PUBLIC_DISABLE_REGISTRATION: {{ .Values.linkwarden.disableRegistration | quote }}
+  {{- end }}
+  {{- if .Values.linkwarden.credentialsEnabled }}
+  NEXT_PUBLIC_CREDENTIALS_ENABLED: {{ .Values.linkwarden.credentialsEnabled | quote }}
+  {{- end }}
+  {{- if .Values.linkwarden.disableNewSSOUsers }}
+  DISABLE_NEW_SSO_USERS: {{ .Values.linkwarden.disableNewSSOUsers | quote }}
+  {{- end }}
+  {{- if .Values.linkwarden.emailProvider -}}
+  NEXT_PUBLIC_EMAIL_PROVIDER: {{ .Values.linkwarden.emailProvider | quote }}
+  {{- end }}

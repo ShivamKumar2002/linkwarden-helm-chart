@@ -1,0 +1,110 @@
+{{- include "linkwarden.validateAll" . -}}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "linkwarden.fullname" . }}
+  labels:
+    {{- include "linkwarden.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "linkwarden.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secrets: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+        {{- if include "linkwarden.ssoEnabled" . }}
+        checksum/sso-secrets: {{ include (print $.Template.BasePath "/sso-secrets.yaml") . | sha256sum }}
+        {{- end }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "linkwarden.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "linkwarden.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: "{{ include "linkwarden.fullname" . }}-env-config"
+            - secretRef:
+                {{- if .Values.linkwarden.existingSecret -}}
+                name: {{ .Values.linkwarden.existingSecret | quote }}
+                {{- else }}
+                name: "{{ include "linkwarden.fullname" . }}-env-secrets"
+                {{- end }}
+          {{- if .Values.linkwarden.sso.existingSecret }}
+            - secretRef:
+                name: {{ .Values.linkwarden.sso.existingSecret | quote }}
+          {{- else if include "linkwarden.ssoEnabled" . }}
+            - secretRef:
+                name: "{{ include "linkwarden.fullname" . }}-sso"
+          {{- end }}
+          {{- if and .Values.postgresql.enabled (not .Values.linkwarden.externalDatabaseUri) }}
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Release.Name }}-postgresql-app"
+                  key: "uri"
+          {{- end }}
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- if eq .Values.linkwarden.storage.type "filesystem" }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.linkwarden.storage.storageFolder }}
+          {{- end }}
+      {{- if eq .Values.linkwarden.storage.type "filesystem" }}
+      volumes:
+        - name: data
+          {{- if .Values.linkwarden.storage.pvc.enabled }}
+          persistentVolumeClaim:
+            {{- if .Values.linkwarden.storage.pvc.existingClaim }}
+            claimName: {{ .Values.linkwarden.storage.pvc.existingClaim }}
+            {{- else }}
+            claimName: {{ include "linkwarden.fullname" . }}-data
+            {{- end }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
