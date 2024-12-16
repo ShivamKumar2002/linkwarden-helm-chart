@@ -3,5 +3,13 @@
   "extends": [
     "config:best-practices",
     "customManagers:helmChartYamlAppVersions"
+  ],
+  "packageRules": [
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "pinDigests": false
+    }
   ]
 }
