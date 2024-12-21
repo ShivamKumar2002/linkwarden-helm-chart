@@ -39,7 +39,7 @@ maintainers:
     url: https://github.com/ShivamKumar2002
 dependencies:
   - name: cluster
-    version: 0.1.1
+    version: 0.1.3
     alias: postgresql
     repository: https://cloudnative-pg.github.io/charts
     condition: postgresql.enabled
