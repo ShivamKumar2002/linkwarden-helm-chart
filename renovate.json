@@ -4,6 +4,7 @@
     "config:best-practices",
     "customManagers:helmChartYamlAppVersions"
   ],
+  "bumpVersion": "patch",
   "packageRules": [
     {
       "matchDatasources": [
