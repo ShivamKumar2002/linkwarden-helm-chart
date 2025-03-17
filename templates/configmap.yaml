@@ -35,6 +35,21 @@ data:
   {{- if .Values.linkwarden.disablePreservation }}
   DISABLE_PRESERVATION: {{ .Values.linkwarden.disablePreservation | quote }}
   {{- end }}
+  {{- if .Values.linkwarden.monolithMaxBuffer }}
+  MONOLITH_MAX_BUFFER: {{ .Values.linkwarden.monolithMaxBuffer | quote }}
+  {{- end }}
+  {{- if .Values.linkwarden.pdfMaxBuffer }}
+  PDF_MAX_BUFFER: {{ .Values.linkwarden.pdfMaxBuffer | quote }}
+  {{- end }}
+  {{- if .Values.linkwarden.screenshotMaxBuffer }}
+  SCREENSHOT_MAX_BUFFER: {{ .Values.linkwarden.screenshotMaxBuffer | quote }}
+  {{- end }}
+  {{- if .Values.linkwarden.readabilityMaxBuffer }}
+  READABILITY_MAX_BUFFER: {{ .Values.linkwarden.readabilityMaxBuffer | quote }}
+  {{- end }}
+  {{- if .Values.linkwarden.previewMaxBuffer }}
+  PREVIEW_MAX_BUFFER: {{ .Values.linkwarden.previewMaxBuffer | quote }}
+  {{- end }}
   {{- if .Values.linkwarden.disableRegistration }}
   NEXT_PUBLIC_DISABLE_REGISTRATION: {{ .Values.linkwarden.disableRegistration | quote }}
   {{- end }}

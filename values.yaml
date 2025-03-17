@@ -85,6 +85,16 @@ linkwarden:
   ignoreHttpsErrors: false
   # -- Disable archiving links
   disablePreservation: false
+  # -- Maximum buffer size for monolith archiving (in MB)
+  monolithMaxBuffer: 20
+  # -- Maximum buffer size for PDF archiving (in MB)
+  pdfMaxBuffer: 20
+  # -- Maximum buffer size for screenshot archiving (in MB)
+  screenshotMaxBuffer: 20
+  # -- Maximum buffer size for readability archiving (in MB)
+  readabilityMaxBuffer: 20
+  # -- Maximum buffer size for preview generation (in MB)
+  previewMaxBuffer: 20
   # -- The variables you need to configure to enable password recovery without the admin interfering, email verification, etc.
   # -- If set to true, email will be enabled. Requires emailFrom and emailServer to be set.
   emailProvider: ""

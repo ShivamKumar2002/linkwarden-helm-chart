@@ -141,6 +141,11 @@ Here's a breakdown of each section in your `values.yaml`:
 | `linkwarden.ignoreUnauthorizedCA` | Ignore certificate verification. | `false` |
 | `linkwarden.ignoreHttpsErrors` | Ignore HTTPS errors. | `false` |
 | `linkwarden.disablePreservation` | Disable archiving links. | `false` |
+| `linkwarden.monolithMaxBuffer` | Maximum buffer size for monolith archiving (in MB). | `20` |
+| `linkwarden.pdfMaxBuffer` | Maximum buffer size for PDF archiving (in MB). | `20` |
+| `linkwarden.screenshotMaxBuffer` | Maximum buffer size for screenshot archiving (in MB). | `20` |
+| `linkwarden.readabilityMaxBuffer` | Maximum buffer size for readability archiving (in MB). | `20` |
+| `linkwarden.previewMaxBuffer` | Maximum buffer size for preview generation (in MB). | `20` |
 | `linkwarden.emailProvider` | Enable email. Must set `emailFrom` and `emailServer`. | `""` |
 | `linkwarden.emailFrom` | Email from address. Ignored if `existingSecret` is set. | `""` |
 | `linkwarden.emailServer` | Email server configuration. | `""` |
