@@ -22,7 +22,7 @@ version: 0.2.1
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
 # renovate: image=ghcr.io/linkwarden/linkwarden
-appVersion: "v2.10.2"
+appVersion: "v2.11.5"
 
 keywords:
   - linkwarden
