@@ -51,7 +51,7 @@ spec:
             - configMapRef:
                 name: "{{ include "linkwarden.fullname" . }}-env-config"
             - secretRef:
-                {{- if .Values.linkwarden.existingSecret -}}
+                {{- if .Values.linkwarden.existingSecret }}
                 name: {{ .Values.linkwarden.existingSecret | quote }}
                 {{- else }}
                 name: "{{ include "linkwarden.fullname" . }}-env-secrets"
